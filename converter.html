@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<title>Link converter for Amazon.co.jp</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<script type="text/javascript">
+window.onload = function(){
+
+document.getElementById('convert').onclick = function(){
+	var result = [];
+	var temp = document.getElementById('source').value.match(/[0-9a-zA-Z]+/g);
+	for(var i=0;i<temp.length;i++){
+		if((temp[i].match(/[0-9]/))&&(temp[i].match(/[a-zA-Z]/))&&(temp[i].length == 10)){ //Detecting ASIN codes
+			result.push(temp[i])
+		}
+	}
+	//Generating HTML source
+	var size = result.length;
+	if(size > 0){
+		var pos = 0;
+		var tag = '';
+		for(var i=0;i<size;i++){
+			pos = i + 1;
+			var href = 'https://www.amazon.co.jp/dp/'+result[i]+'/';
+			var str = '(' + pos + '/' + size + ') : ' + href;
+			tag += '<a href="' + href + '" target="_blank">' + str + '</a><br>';
+		}
+		document.getElementById('output_inner').innerHTML = tag;
+	}else{
+		document.getElementById('output_inner').innerHTML = 'no amazon id in your text';
+	}
+};
+
+document.getElementById('clear').onclick = function(){
+	document.getElementById('source').value = '';
+	document.getElementById('output_inner').innerHTML = '';
+};
+
+};
+</script>
+<style type="text/css">
+<!--
+html,body{width:100%;height:100%;margin:0px;padding:0px}
+#input_area{height:60%;padding:10px 5px}
+#output_area{height:40%}
+#output_inner{width:95%;height:80%;margin:0px auto;overflow:scroll;border:solid 1px #ababab;font-size:0.7em}
+#source{display:block;width:98%;height:56%;margin:0px auto;font-size:1.5em}
+#convert{display:block;width:70%;height:18%;font-size:7vh;margin:0px auto 10px auto}
+#clear{display:block;width:70%;height:18%;font-size:7vh;margin:10px auto 0px auto}
+-->
+</style>
+</head>
+<body>
+
+<div id="input_area">
+	<button id="convert" type="button">CONVERT</button>
+	<textarea id="source" placeholder="source text here"></textarea>
+	<button id="clear" type="button">CLEAR</button>
+</div>
+
+<div id="output_area">
+	<div id="output_inner"></div>
+</div>
+
+</body>
+</html>
